@@ -2,14 +2,33 @@
 
 > AI + Pandoc 双引擎，让用户**不用学 Markdown**、**不用拆文件**，写完 Word 草稿就能一键交差。
 
-## 它解决什么问题
+## 📺 演示视频（2 分 27 秒）
 
-学位论文的"内容"和"格式"是两件事，但学校通常只发一份格式要求 + 一份 Word 模板，让你自己去对齐。多数同学就是在最后一周对着字号、行距、目录域、题注编号反复磨。
+https://github.com/user-attachments/assets/dd1a1852-683c-4884-a8e4-7657050f410a
 
-ThesisEZ 的思路：
-- 你写**只管内容**的草稿（字号字体随便）
-- AI 解析草稿结构，输出标准 Markdown
-- 渲染引擎用 Word 模板套出符合规范的 docx
+> 点上方 ▶️ 直接在线播放：从一份"裸奔" Word 草稿 → 跑一条命令 → 拿到带封面、目录、题注、三线表的合规 docx，全程演示。
+
+---
+
+## 一句话理解这个工具
+
+**学位论文里"内容"和"格式"是两件事。** 学校通常发一份《格式要求.pdf》和一份 Word 模板，让你自己对齐字号、行距、目录域、题注编号、三线表样式——多数同学就是在最后一周对着这些反复磨。
+
+ThesisEZ 让你：
+- ✍️ 写**只管内容**的 Word 草稿（字号字体随便）
+- 🤖 AI 解析草稿结构，输出标准化 Markdown
+- 📄 渲染引擎用学校 Word 模板套出符合规范的最终 docx
+
+> 默认带 SJTU 的中文模板（因为我自己是 SJTU 的），但**模板可以一键替换成任何学校的 .docx**——这工具本身是通用的。
+
+---
+
+## 不想自己跑也能看效果
+
+仓库里 `ThesisEZ/` 文件夹直接放了一份完整跑通的样本：
+- 📥 输入：[`输入.docx`](./ThesisEZ/输入.docx)（一份测试用的"裸奔"草稿）
+- 📤 输出：跑完后会生成 `ThesisEZ.docx`（带封面、目录、题注的合规版）
+- 🎞️ 全过程：上方演示视频
 
 ---
 
@@ -21,7 +40,7 @@ ThesisEZ 的思路：
 
 ### 2. Pandoc
 
-> **不要 `pip install pandoc`！** 那个包只是个 Python 包装器，不是 pandoc 本体，装完照样会报"找不到 pandoc"。
+> ⚠️ **不要 `pip install pandoc`！** 那个包只是个 Python 包装器，不是 pandoc 本体，装完照样会报"找不到 pandoc"。
 
 正确方式二选一：
 
@@ -47,7 +66,7 @@ pip install -r requirements.txt
 
 ### 4. DeepSeek API Key
 
-去 [platform.deepseek.com](https://platform.deepseek.com/) 注册，充几块钱（按token量估计运行一次两万字论文需要差不多0.1元或更低），拿到一个 `sk-` 开头的 key。然后在终端里设置环境变量：
+去 [platform.deepseek.com](https://platform.deepseek.com/) 注册，充几块钱（按 token 量估计跑一次两万字论文差不多 0.1 元或更低），拿到一个 `sk-` 开头的 key。然后在终端里设置环境变量：
 
 **Windows（CMD）：**
 ```cmd
@@ -87,7 +106,7 @@ export DEEPSEEK_API_KEY=sk-你的key
 只要你大致这样写，AI 都能识别（**格式不用对齐，字号字体随便**）：
 
 ```
-不吃饭会很饿       ← 第一段当标题
+不吃饭会很饿                              ← 第一段当标题
 
 摘要
 xxxxxxx 中文摘要 xxxxx
@@ -150,16 +169,6 @@ Keywords: A, B, C
 | Word 打开后目录是空的 / 题注编号没出来 | 没点"更新域" | 关掉重开，弹窗点"是"；或者 Ctrl+A 全选 → F9 |
 
 ---
-
-## 致谢
-
-- 引擎：Pandoc + python-docx + DeepSeek
-
-
-`template/` 里默认放了 SJTU 的中文模板（仅作示例）。换法：
-1. 把你学校官方发的 `.docx` 模板放到 `template/` 下
-2. 在 `render.py` 里把 `TEMPLATE_ZH`、`TEMPLATE_EN` 路径改成你的文件名即可
-3. 模板里需要保留 `Heading 1/2/3`、`图`、`表`、`公式` 等标准样式名，渲染引擎会按这些样式套版
 
 ## 致谢
 
