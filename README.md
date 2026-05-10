@@ -4,8 +4,7 @@
 
 ## 🌐 在线 Demo
 
-**不想装环境、只想看看效果？这里进：** [https://thesisez.onrender.com](https://thesisez.onrender.com)
-
+**不想装环境、只想看看效果？这里进：** https://thesisez-production.up.railway.app/
 传一份 Word 草稿上去，几十秒后拿到渲染好的 docx。服务器不存任何文件。
 
 > ℹ️ 免费实例 15 分钟没人访问会休眠，首次打开可能要等 30 秒冷启动。
