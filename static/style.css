@@ -79,6 +79,33 @@ p, li { font-size: 15px; color: #374151; }
 }
 .hint { font-size: 14px; color: #6b7280; margin-top: 0; }
 
+/* sample download box */
+.sample-box {
+  background: #ecfdf5;
+  border: 1px dashed #6ee7b7;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #065f46;
+  line-height: 1.8;
+}
+.sample-box strong { color: #047857; }
+.sample-box small { display: block; color: #6b7280; font-size: 12px; margin-top: 4px; }
+.sample-btn {
+  display: inline-block;
+  padding: 4px 12px;
+  margin-left: 4px;
+  background: #fff;
+  border: 1px solid #6ee7b7;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #065f46;
+  font-weight: 600;
+  font-size: 13px;
+}
+.sample-btn:hover { background: #d1fae5; }
+
 .form .row { margin: 16px 0; }
 .form label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
 .form input[type="file"], .form input[type="text"], .form input:not([type]) {

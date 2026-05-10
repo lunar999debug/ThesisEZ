@@ -86,6 +86,20 @@ def health() -> tuple[str, int]:
     return "ok", 200
 
 
+@app.route("/sample")
+def sample_draft():
+    """提供示例草稿下载 —— 让没论文的评审也能马上试用。"""
+    sample_path = SOURCE_DIR / "输入.docx"
+    if not sample_path.is_file():
+        abort(404)
+    return send_file(
+        sample_path,
+        mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        as_attachment=True,
+        download_name="示例草稿.docx",
+    )
+
+
 @app.errorhandler(413)
 def too_large(_e):
     return (
