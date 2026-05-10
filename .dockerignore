@@ -1,0 +1,15 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+ThesisEZ/__pycache__
+ThesisEZ/md
+ThesisEZ/image
+ThesisEZ/_ai_tags.json
+ThesisEZ/ThesisEZ.docx
+ThesisEZ/101-setup.md
+ThesisEZ/~$输入.docx
+ThesisEZ/演示视频.mp4
+README.md
+*.md
+!README.md

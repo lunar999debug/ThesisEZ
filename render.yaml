@@ -1,0 +1,17 @@
+# Render 部署配置：用 Docker 启容器
+# 对应文档：https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: thesisez
+    runtime: docker
+    plan: free
+    region: singapore  # 离国内最近，国内访问更稳
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false   # 在 Render 控制台手动填入，避免泄露到 Git
+      - key: PYTHONUTF8
+        value: "1"
+      - key: PYTHONIOENCODING
+        value: "utf-8"

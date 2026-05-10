@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThesisEZ — 一键把"裸奔"草稿变成标准格式毕设</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>ThesisEZ</h1>
+    <p class="tagline">一键把"裸奔"Word 草稿变成符合学校规范的毕设文档</p>
+    <p class="sub">AI 解析结构 + Pandoc 渲染引擎 · 不用学 Markdown · 不用拆文件</p>
+    <p class="github"><a href="https://github.com/lunar999debug/ThesisEZ" target="_blank">📦 源代码 GitHub</a></p>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="explain">
+    <h2>它解决什么问题</h2>
+    <p>学位论文的"内容"和"格式"是两件事。学校发一份《格式要求.pdf》和一份 Word 模板让你自己对齐字号、行距、目录域、题注编号——多数同学就是在最后一周对着这些反复磨。</p>
+    <p>ThesisEZ 让你写<strong>只管内容</strong>的草稿（字号字体随便），AI 解析结构，渲染引擎用学校 Word 模板套出符合规范的最终 docx。</p>
+    <p class="note">默认带 SJTU 中文模板（因为我自己是 SJTU），但模板可以替换成任意学校的 .docx。</p>
+  </section>
+
+  <section class="demo-card">
+    <h2>🧪 在线试用</h2>
+    <p class="hint">上传一份"裸奔"Word 草稿（不需要任何格式），填封面信息，几十秒拿回合规版 docx。</p>
+
+    <form id="form" class="form">
+
+      <div class="row">
+        <label for="draft">草稿文件 <span class="req">*</span></label>
+        <input type="file" id="draft" name="draft" accept=".docx" required>
+        <small>仅支持 .docx · 上限 5 MB · 建议先看下方"草稿弱约定"</small>
+      </div>
+
+      <details class="cover-info">
+        <summary>封面信息（可选 · 不填用占位演示）</summary>
+        <div class="grid">
+          <div><label>论文标题（中）</label><input name="title_zh" placeholder="例：XX系统的设计与实现"></div>
+          <div><label>论文标题（英）</label><input name="title_en" placeholder="Design and Implementation of ..."></div>
+          <div><label>姓名</label><input name="author" placeholder="张三"></div>
+          <div><label>学号</label><input name="student_id" placeholder="5210xxxxxx"></div>
+          <div><label>导师</label><input name="advisor" placeholder="李四 教授"></div>
+          <div><label>专业</label><input name="major" placeholder="计算机科学与技术"></div>
+          <div><label>学院</label><input name="school" placeholder="电子信息与电气工程学院"></div>
+          <div><label>提交日期</label><input name="submit_date" placeholder="2026-06"></div>
+        </div>
+      </details>
+
+      <button type="submit" id="submitBtn">🚀 开始渲染</button>
+      <p class="quota">每个 IP 每天限 {{ quota }} 次（演示用，防滥用）</p>
+    </form>
+
+    <div id="status" class="status hidden"></div>
+
+  </section>
+
+  <section class="convention">
+    <h2>📝 草稿的弱约定</h2>
+    <p>只要你大致这样写，AI 都能识别（<strong>格式不用对齐，字号字体随便</strong>）：</p>
+    <pre>不吃饭会很饿                              ← 第一段当标题
+
+摘要
+xxxxxxx 中文摘要 xxxxx
+关键词：A；B；C
+
+ABSTRACT
+xxxxxxx english abstract xxxxx
+Keywords: A, B, C
+
+一、绪论                                  ← 一级标题：中文数字+顿号
+1.1 研究背景                              ← 二级标题：N.M
+1.1.1 国内现状                            ← 三级标题：N.M.K
+正文段落 ...
+图3-1 实验流程图                          ← 图占位
+表3-1 数据汇总                            ← 表占位
+
+参考文献
+[1] 张三. 论文标题 [J]. ...
+
+致谢
+感谢 xxx</pre>
+  </section>
+
+  <section class="how">
+    <h2>⚙️ 怎么实现的</h2>
+    <ul>
+      <li><strong>AI 解析层</strong>（aichuli.py）：DeepSeek + 硬正则兜底，识别每段是 h1/h2/h3/正文/题注/参考文献</li>
+      <li><strong>渲染引擎层</strong>（render.py）：Pandoc + python-docx，套学校模板做后处理（三线表、题注、SEQ 域、分节符、目录）</li>
+      <li><strong>多重防御</strong>：AI 错了 5% 也不能让用户拿到看似正确实际错的输出 → 严格 Prompt + 硬正则兜底 + 状态机限定生效区域</li>
+    </ul>
+  </section>
+
+  <section class="privacy">
+    <h2>🔒 隐私说明</h2>
+    <ul>
+      <li>本 Demo 只在内存里处理你的文件，渲染完<strong>立即销毁</strong>，不存任何副本</li>
+      <li>但本 Demo 仅供评审/试用，<strong>请不要</strong>上传你真正未发表的毕设草稿到任何陌生服务器（包括本站）</li>
+      <li>真正生产用法：clone <a href="https://github.com/lunar999debug/ThesisEZ" target="_blank">GitHub 仓库</a>，本地跑</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p>ThesisEZ · 引擎：Pandoc + python-docx + DeepSeek · <a href="https://github.com/lunar999debug/ThesisEZ" target="_blank">GitHub</a></p>
+</footer>
+
+<script>
+const form = document.getElementById('form');
+const btn = document.getElementById('submitBtn');
+const status = document.getElementById('status');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  status.className = 'status running';
+  status.classList.remove('hidden');
+  status.innerHTML = '⏳ 正在跑 AI 解析 + 渲染（通常 30~120 秒，论文越长越慢）...';
+  btn.disabled = true;
+  btn.textContent = '处理中...';
+
+  const fd = new FormData(form);
+
+  try {
+    const resp = await fetch('/api/render', { method: 'POST', body: fd });
+
+    if (!resp.ok) {
+      let msg = `请求失败（HTTP ${resp.status}）`;
+      try {
+        const err = await resp.json();
+        if (err.error) msg = err.error;
+      } catch {}
+      status.className = 'status error';
+      status.innerHTML = '❌ ' + msg;
+      return;
+    }
+
+    // 成功：触发下载
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ThesisEZ.docx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    status.className = 'status success';
+    status.innerHTML = '✅ 渲染成功，已自动下载 ThesisEZ.docx<br>用 Word 打开后，弹"是否更新域"<strong>点是</strong>（刷新目录和题注编号）。';
+
+  } catch (err) {
+    status.className = 'status error';
+    status.innerHTML = '❌ 网络错误：' + err.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 开始渲染';
+  }
+});
+</script>
+
+</body>
+</html>

@@ -2,6 +2,16 @@
 
 > AI + Pandoc 双引擎，让用户**不用学 Markdown**、**不用拆文件**，写完 Word 草稿就能一键交差。
 
+## 🌐 在线 Demo
+
+**不想装环境、只想看看效果？这里进：** [https://thesisez.onrender.com](https://thesisez.onrender.com)
+
+传一份 Word 草稿上去，几十秒后拿到渲染好的 docx。服务器不存任何文件。
+
+> ℹ️ 免费实例 15 分钟没人访问会休眠，首次打开可能要等 30 秒冷启动。
+
+---
+
 ## 📺 演示视频（2 分 27 秒）
 
 https://github.com/user-attachments/assets/dd1a1852-683c-4884-a8e4-7657050f410a
