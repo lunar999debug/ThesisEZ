@@ -38,7 +38,9 @@ JOBS_ROOT = Path("/tmp/jobs")
 JOBS_ROOT.mkdir(parents=True, exist_ok=True)
 
 # ──────────────────── 限流配置 ──────────────────────
-MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB
+MAX_UPLOAD_BYTES = 20 * 1024 * 1024  # 20 MB —— 草稿 + 多张图表一起估算
+ALLOWED_FIGURE_EXTS = {".png", ".jpg", ".jpeg", ".pdf", ".csv"}
+MAX_FIGURES = 30  # 单次上传图表最多 30 个文件
 DAILY_QUOTA_PER_IP = 5              # 每个 IP 每天最多 5 次
 JOB_TIMEOUT_SEC = 240               # 单次任务最长 4 分钟
 
@@ -128,6 +130,19 @@ def api_render():
     if not draft.filename or not draft.filename.lower().endswith(".docx"):
         return jsonify(error="请上传 .docx 文件"), 400
 
+    # 可选：图表文件（多个）
+    figure_files = request.files.getlist("figures")
+    figure_files = [f for f in figure_files if f and f.filename]
+    if len(figure_files) > MAX_FIGURES:
+        return jsonify(error=f"最多上传 {MAX_FIGURES} 个图表文件"), 400
+    for f in figure_files:
+        ext = Path(f.filename).suffix.lower()
+        if ext not in ALLOWED_FIGURE_EXTS:
+            return (
+                jsonify(error=f"不支持的图表格式：{f.filename}（只接受 png/jpg/jpeg/pdf/csv）"),
+                400,
+            )
+
     # 封面信息（可选，没填就用占位）。
     # ☆ 字段名必须严格对齐 aichuli.py 中 SETUP_TEMPLATE 使用的中文 key。
     cover_info = {
@@ -149,7 +164,7 @@ def api_render():
     job_id = uuid.uuid4().hex[:12]
     job_dir = JOBS_ROOT / job_id
     try:
-        _prepare_job_dir(job_dir, draft, cover_info)
+        _prepare_job_dir(job_dir, draft, cover_info, figure_files)
     except Exception as e:
         _cleanup_job(job_dir)
         return jsonify(error=f"工作区准备失败：{e}"), 500
@@ -187,7 +202,7 @@ def api_render():
 
 
 # ──────────────────── pipeline 实现 ──────────────────
-def _prepare_job_dir(job_dir: Path, draft_file, cover_info: dict) -> None:
+def _prepare_job_dir(job_dir: Path, draft_file, cover_info: dict, figure_files: list) -> None:
     """把每次请求所需的全部文件复制到独立工作区。"""
     job_dir.mkdir(parents=True, exist_ok=False)
 
@@ -207,8 +222,13 @@ def _prepare_job_dir(job_dir: Path, draft_file, cover_info: dict) -> None:
     # 4) 存用户上传的草稿
     draft_file.save(job_dir / "输入.docx")
 
-    # 5) 建空的图表/ 目录（避免代码找不到）
-    (job_dir / "图表").mkdir(exist_ok=True)
+    # 5) 图表目录——创建后把用户上传的图表文件全部起名存进去。
+    fig_dir = job_dir / "图表"
+    fig_dir.mkdir(exist_ok=True)
+    for f in figure_files:
+        # 只取原始文件名的 basename，防止路径穿越
+        safe_name = Path(f.filename).name
+        f.save(fig_dir / safe_name)
 
 
 def _run_pipeline(job_dir: Path) -> Path:

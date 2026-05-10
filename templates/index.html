@@ -42,7 +42,17 @@
       <div class="row">
         <label for="draft">草稿文件 <span class="req">*</span></label>
         <input type="file" id="draft" name="draft" accept=".docx" required>
-        <small>仅支持 .docx · 上限 5 MB · 建议先看下方"草稿弱约定"</small>
+        <small>仅支持 .docx · 总上限 20 MB · 建议先看下方"草稿弱约定"</small>
+      </div>
+
+      <div class="row">
+        <label for="figures">图表文件（可选 · 可多选）</label>
+        <input type="file" id="figures" name="figures" accept=".png,.jpg,.jpeg,.pdf,.csv" multiple>
+        <small>
+          按草稿里的图表号命名。最多 30 个文件。例：
+          <code>图3-1.png</code>、<code>图4-2.jpg</code>、<code>表3-1.csv</code>
+          · 不传也可以，论文里的图表位置会保留「图 N-M 待插入」占位。
+        </small>
       </div>
 
       <details class="cover-info">
