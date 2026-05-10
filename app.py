@@ -114,16 +114,21 @@ def api_render():
     if not draft.filename or not draft.filename.lower().endswith(".docx"):
         return jsonify(error="请上传 .docx 文件"), 400
 
-    # 封面信息（可选，没填就用占位）
+    # 封面信息（可选，没填就用占位）。
+    # ☆ 字段名必须严格对齐 aichuli.py 中 SETUP_TEMPLATE 使用的中文 key。
     cover_info = {
-        "title_zh": request.form.get("title_zh", "").strip() or "演示论文标题",
-        "title_en": request.form.get("title_en", "").strip() or "Demo Thesis Title",
-        "author": request.form.get("author", "").strip() or "演示作者",
-        "student_id": request.form.get("student_id", "").strip() or "0000000000",
-        "advisor": request.form.get("advisor", "").strip() or "演示导师",
-        "major": request.form.get("major", "").strip() or "演示专业",
-        "school": request.form.get("school", "").strip() or "演示学院",
-        "submit_date": request.form.get("submit_date", "").strip() or "2026-06",
+        "姓名":          request.form.get("name_zh", "").strip() or "演示同学",
+        "Author":        request.form.get("name_en", "").strip() or "Demo Student",
+        "学号":          request.form.get("student_id", "").strip() or "520000000000",
+        "导师":          request.form.get("advisor_zh", "").strip() or "演示导师",
+        "Supervisor":    request.form.get("advisor_en", "").strip() or "Demo Advisor",
+        "中文学院名":    request.form.get("school_zh", "").strip() or "演示学院",
+        "英文学院名":    request.form.get("school_en", "").strip() or "Demo School",
+        "专业名称":      request.form.get("major", "").strip() or "演示专业",
+        "申请学位层次":  request.form.get("degree", "").strip() or "学士",
+        "年份":          request.form.get("year", "").strip() or "2026",
+        "中文论文标题":  request.form.get("title_zh", "").strip() or "演示论文标题",
+        "英文论文标题":  request.form.get("title_en", "").strip() or "Demo Thesis Title",
     }
 
     # 3. 起独立工作区
