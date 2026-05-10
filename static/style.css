@@ -91,11 +91,11 @@ p, li { font-size: 15px; color: #374151; }
   line-height: 1.8;
 }
 .sample-box strong { color: #047857; }
-.sample-box small { display: block; color: #6b7280; font-size: 12px; margin-top: 4px; }
+.sample-box small { display: block; color: #6b7280; font-size: 12px; margin-top: 8px; line-height: 1.6; }
+.sample-buttons { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
 .sample-btn {
   display: inline-block;
-  padding: 4px 12px;
-  margin-left: 4px;
+  padding: 6px 14px;
   background: #fff;
   border: 1px solid #6ee7b7;
   border-radius: 6px;

@@ -102,6 +102,38 @@ def sample_draft():
     )
 
 
+# 启动时预生成示例图表 zip（只打一次，请求时直接吞）
+import zipfile
+from io import BytesIO as _BytesIO
+
+def _build_sample_figures_zip() -> bytes:
+    fig_dir = SOURCE_DIR / "图表"
+    if not fig_dir.is_dir():
+        return b""
+    buf = _BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for p in sorted(fig_dir.iterdir()):
+            if p.is_file():
+                # 压在压缩包里保留 「图表/xxx」 路径，让用户解压后原样拖进项目
+                zf.write(p, arcname=f"图表/{p.name}")
+    return buf.getvalue()
+
+_SAMPLE_FIGURES_ZIP = _build_sample_figures_zip()
+
+
+@app.route("/sample-figures")
+def sample_figures():
+    """提供示例图表压缩包下载。"""
+    if not _SAMPLE_FIGURES_ZIP:
+        abort(404)
+    return send_file(
+        _BytesIO(_SAMPLE_FIGURES_ZIP),
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name="示例图表.zip",
+    )
+
+
 @app.errorhandler(413)
 def too_large(_e):
     return (
